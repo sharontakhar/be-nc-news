@@ -17,7 +17,4 @@ app.use((err, req, res, next) => {
   next();
 });
 
-//do more here
-//app.all() look at this
-
 module.exports = app;

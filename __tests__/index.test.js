@@ -25,4 +25,16 @@ describe("1. GET /api/topics", () => {
         });
       });
   });
+
+  test("POST:404 responds with an appropriate error message when provided with a bad topic (no description)", () => {
+    return request(app)
+      .post("/api/teams")
+      .send({
+        slug: "Bad Slug",
+      })
+      .expect(404)
+      .then((response) => {
+        expect(response.body.msg).toBe("Route not found");
+      });
+  });
 });
