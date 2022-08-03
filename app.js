@@ -6,9 +6,20 @@ const { getAPITopics, getAPIArticles } = require("./controllers/controllers");
 app.get("/api/topics", getAPITopics);
 app.get("/api/articles/:article_id", getAPIArticles);
 
-app.all("/*", function (req, res, next) {
+// app.use("*", function (req, res, next) {
+//   res.status(404).send({ msg: "Route not found" });
+//   next();
+// });
+
+app.use("/*", (req, res) => {
   res.status(404).send({ msg: "Route not found" });
-  next();
+});
+
+app.use((err, req, res, next) => {
+  if (err.status && err.msg) {
+    res.status(err.status).send({ msg: err.msg });
+  }
+  next(err);
 });
 
 app.use((err, req, res, next) => {

@@ -75,4 +75,13 @@ describe("2. GET /api/articles/:article_id", () => {
         expect(response.body.msg).toBe("Bad Request");
       });
   });
+
+  test("GET: 404 response when submitting and article_id which does not exist in the database", () => {
+    return request(app)
+      .get("/api/articles/9999")
+      .expect(404)
+      .then((response) => {
+        expect(response.body.msg).toEqual("Route not found");
+      });
+  });
 });
