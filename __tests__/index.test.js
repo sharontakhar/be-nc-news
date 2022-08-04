@@ -240,3 +240,47 @@ describe("4.GET /api/users", () => {
       });
   });
 });
+
+//get articles
+describe("5.GET /api/articles", () => {
+  test("status:200 sends back an array of articles objects", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then((response) => {
+        response.body.articles.forEach((article) => {
+          expect(article).toEqual(
+            expect.objectContaining({
+              author: expect.any(String),
+              title: expect.any(String),
+              topic: expect.any(String),
+              article_id: expect.any(Number),
+              created_at: expect.any(String),
+              votes: expect.any(Number),
+              comment_count: expect.any(Number),
+            })
+          );
+        });
+      });
+  });
+
+  test("the first array to be in DESC order to be equal to the below", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then((response) => {
+        expect(response.body.articles[0]).toEqual(
+          expect.objectContaining({
+            article_id: 7,
+            title: "Z",
+            topic: "mitch",
+            author: "icellusedkars",
+            body: "I was hungry.",
+            created_at: "2020-01-07T14:08:00.000Z",
+            votes: 0,
+            comment_count: 0,
+          })
+        );
+      });
+  });
+});

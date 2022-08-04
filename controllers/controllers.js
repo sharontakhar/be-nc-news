@@ -1,9 +1,10 @@
 const articles = require("../db/data/test-data/articles");
 const {
   selectTopics,
-  selectArticles,
+  selectArticlesById,
   updateArticles,
   selectUsers,
+  selectArticles,
 } = require("../models/models");
 
 //GET API TOPICS
@@ -14,9 +15,9 @@ exports.getAPITopics = (req, res) => {
 };
 
 //GET API ARTICLES BY ID
-exports.getAPIArticles = (req, res, next) => {
+exports.getAPIArticlesbyID = (req, res, next) => {
   const { article_id } = req.params;
-  selectArticles(article_id)
+  selectArticlesById(article_id)
     .then((articles) => {
       res.status(200).send({ articles });
     })
@@ -36,6 +37,16 @@ exports.getUsers = (req, res, next) => {
     });
 };
 
+//GET API ARTICLES
+exports.getArticles = (req, res, next) => {
+  selectArticles()
+    .then((articles) => {
+      res.status(200).send({ articles });
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
 //PATCH API ARTICLES
 exports.patchAPIArticles = (req, res, next) => {
   const { article_id } = req.params;
