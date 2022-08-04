@@ -57,8 +57,6 @@ Bear in mind, handling bad inputs from clients doesn't necessarily have to lead 
 
 ### POST `/api/articles/:article_id/comments`
 
--
-
 ### GET `/api/articles/:article_id/comments`
 
 -

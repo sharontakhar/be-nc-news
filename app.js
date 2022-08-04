@@ -1,17 +1,22 @@
 const express = require("express");
 const app = express();
-const { getAPITopics, getAPIArticles } = require("./controllers/controllers");
+const {
+  getAPITopics,
+  getAPIArticles,
+  patchAPIArticles,
+  getUsers,
+} = require("./controllers/controllers");
 
-// app.js GET
+// GET
 app.get("/api/topics", getAPITopics);
 app.get("/api/articles/:article_id", getAPIArticles);
 
-// app.use("*", function (req, res, next) {
-//   res.status(404).send({ msg: "Route not found" });
-//   next();
-// });
+//PATCH
+app.use(express.json());
+app.patch("/api/articles/:article_id", patchAPIArticles);
 
-app.use("/*", (req, res) => {
+// Error Handling
+app.use("*", (req, res) => {
   res.status(404).send({ msg: "Route not found" });
 });
 
@@ -25,6 +30,8 @@ app.use((err, req, res, next) => {
 app.use((err, req, res, next) => {
   if (err.code === "22P02") {
     res.status(400).send({ msg: "Bad Request" });
+  } else if (err.code === "23502") {
+    res.status(400).send({ msg: "Missing key" });
   }
 });
 
