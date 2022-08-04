@@ -8,8 +8,31 @@ const articles = require("../db/data/test-data/articles");
 beforeEach(() => seed(testData));
 afterAll(() => db.end());
 
+//error handing
+describe("GET:404 response", () => {
+  test("Status:404 responds with an appropriate error message when provided with an incorrect path", () => {
+    return request(app)
+      .post("/api/teams")
+      .send({
+        slug: "Bad Slug",
+      })
+      .expect(404)
+      .then((response) => {
+        expect(response.body.msg).toBe("Route not found");
+      });
+  });
+  test("Status:404 responds with an appropriate error message when provided with an incorrect path", () => {
+    return request(app)
+      .get("/api/ubers")
+      .expect(404)
+      .then((response) => {
+        expect(response.body.msg).toBe("Route not found");
+      });
+  });
+});
+
 //get the topics
-describe("1. GET /api/topics", () => {
+describe("1.GET /api/topics", () => {
   test("status:200 sends back an array of topics objects", () => {
     return request(app)
       .get("/api/topics")
@@ -29,23 +52,8 @@ describe("1. GET /api/topics", () => {
   });
 });
 
-//error handing
-describe("GET: 404 response", () => {
-  test("Status:404 responds with an appropriate error message when provided with an incorrect path", () => {
-    return request(app)
-      .post("/api/teams")
-      .send({
-        slug: "Bad Slug",
-      })
-      .expect(404)
-      .then((response) => {
-        expect(response.body.msg).toBe("Route not found");
-      });
-  });
-});
-
-//get artivles by id
-describe("2. GET /api/articles/:article_id", () => {
+//get articles by id
+describe("2.GET /api/articles/:article_id", () => {
   test("status:200 sends back an article  object with the following properties", () => {
     const article_titles = "Living in the shadow of a great man";
     const art_id = 3;
@@ -90,8 +98,8 @@ describe("2. GET /api/articles/:article_id", () => {
   });
 });
 
-//incrementing votes values
-describe("3. PATCH /api/articles/:article_id", () => {
+//patch inc_votes
+describe("3.PATCH /api/articles/:article_id", () => {
   test("status:200, responds with the incremented votes", () => {
     const incrementedVotes = { inc_votes: 12 };
     return request(app)
@@ -164,6 +172,28 @@ describe("3. PATCH /api/articles/:article_id", () => {
       .expect(404)
       .then((response) => {
         expect(response.body.msg).toEqual("Route not found");
+      });
+  });
+});
+
+//get users
+describe("4.GET /api/users", () => {
+  test("status:200 sends back an array of users", () => {
+    return request(app)
+      .get("/api/users")
+      .expect(200)
+      .then((response) => {
+        expect(response.body.users).toEqual(expect.any(Array));
+        //expect(users.length).toBe(3?)
+        response.body.users.forEach((user) => {
+          expect(user).toEqual(
+            expect.objectContaining({
+              username: expect.any(String),
+              name: expect.any(String),
+              avatar_url: expect.any(String),
+            })
+          );
+        });
       });
   });
 });

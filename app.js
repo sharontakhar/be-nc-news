@@ -10,6 +10,7 @@ const {
 // GET
 app.get("/api/topics", getAPITopics);
 app.get("/api/articles/:article_id", getAPIArticles);
+app.get("/api/users", getUsers);
 
 //PATCH
 app.use(express.json());
