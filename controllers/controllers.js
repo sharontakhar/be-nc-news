@@ -6,14 +6,14 @@ const {
   selectUsers,
 } = require("../models/models");
 
-// GET API TOPICS
+//GET API TOPICS
 exports.getAPITopics = (req, res) => {
   selectTopics().then((topics) => {
     res.status(200).send({ topics });
   });
 };
 
-// GET API ARTICLES BY ID
+//GET API ARTICLES BY ID
 exports.getAPIArticles = (req, res, next) => {
   const { article_id } = req.params;
   selectArticles(article_id)
@@ -25,7 +25,18 @@ exports.getAPIArticles = (req, res, next) => {
     });
 };
 
-// PATCH API ARTICLES
+//GET API USERS
+exports.getUsers = (req, res, next) => {
+  selectUsers()
+    .then((users) => {
+      res.status(200).send({ users });
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
+
+//PATCH API ARTICLES
 exports.patchAPIArticles = (req, res, next) => {
   const { article_id } = req.params;
   const { inc_votes } = req.body;

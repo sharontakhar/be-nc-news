@@ -1,14 +1,14 @@
 const db = require("../db/connection");
 const articles = require("../db/data/test-data/articles");
 
-// GET API TOPICS
+//GET API TOPICS
 exports.selectTopics = () => {
   return db.query("SELECT * FROM topics;").then((topics) => {
     return topics.rows;
   });
 };
 
-// GET API ARTICLES BY ID
+//GET API ARTICLES BY ID
 exports.selectArticles = (article_id) => {
   return db
     .query("SELECT * FROM articles WHERE article_id = $1;", [article_id])
@@ -23,7 +23,14 @@ exports.selectArticles = (article_id) => {
     });
 };
 
-// PATCH API ARTICLES
+//GET USERS
+exports.selectUsers = () => {
+  return db.query("SELECT * FROM users;").then((users) => {
+    return users.rows;
+  });
+};
+
+//PATCH API ARTICLES
 exports.updateArticles = (article_id, inc_votes) => {
   return db
     .query(
