@@ -184,7 +184,6 @@ describe("4.GET /api/users", () => {
       .expect(200)
       .then((response) => {
         expect(response.body.users).toEqual(expect.any(Array));
-        //expect(users.length).toBe(3?)
         response.body.users.forEach((user) => {
           expect(user).toEqual(
             expect.objectContaining({
