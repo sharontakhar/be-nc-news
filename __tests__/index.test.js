@@ -4,6 +4,7 @@ const db = require("../db/connection");
 const seed = require("../db/seeds/seed");
 const testData = require("../db/data/test-data");
 const articles = require("../db/data/test-data/articles");
+const jestSorted = require("jest-sorted");
 
 beforeEach(() => seed(testData));
 afterAll(() => db.end());
@@ -193,7 +194,6 @@ describe("3.PATCH /api/articles/:article_id", () => {
       .expect(200)
       .then(({ body }) => {
         const { articles } = body;
-        //expect(Object.keys(articles).length).toBe(7);
         expect(articles).toEqual({
           article_id: 3,
           title: "Eight pug gifs that remind me of mitch",
@@ -237,6 +237,51 @@ describe("4.GET /api/users", () => {
             })
           );
         });
+      });
+  });
+});
+
+//get articles
+describe("5.GET /api/articles", () => {
+  test("status:200 sends back an array of articles objects", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then((response) => {
+        response.body.articles.forEach((article) => {
+          expect(article).toEqual(
+            expect.objectContaining({
+              author: expect.any(String),
+              title: expect.any(String),
+              topic: expect.any(String),
+              article_id: expect.any(Number),
+              created_at: expect.any(String),
+              votes: expect.any(Number),
+              comment_count: expect.any(Number),
+            })
+          );
+        });
+      });
+  });
+
+  test("the array to be ordered by date to be in DESC order", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then(({ body }) => {
+        const { articles } = body;
+        expect([{ articles }]).toBeSortedBy("created_at", { descending: true });
+      });
+  });
+});
+
+describe("Errors for/api/articles", () => {
+  test("the array to be ordered by date to be in DESC order", () => {
+    return request(app)
+      .get("/api/art")
+      .expect(404)
+      .then((response) => {
+        expect(response.body.msg).toEqual("Route not found");
       });
   });
 });

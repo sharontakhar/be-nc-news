@@ -2,15 +2,17 @@ const express = require("express");
 const app = express();
 const {
   getAPITopics,
-  getAPIArticles,
+  getAPIArticlesbyID,
   patchAPIArticles,
   getUsers,
+  getArticles,
 } = require("./controllers/controllers");
 
 // GET
 app.get("/api/topics", getAPITopics);
-app.get("/api/articles/:article_id", getAPIArticles);
+app.get("/api/articles/:article_id", getAPIArticlesbyID);
 app.get("/api/users", getUsers);
+app.get("/api/articles", getArticles);
 
 //PATCH
 app.use(express.json());

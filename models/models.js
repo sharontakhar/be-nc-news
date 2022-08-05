@@ -1,3 +1,4 @@
+const { RowDescriptionMessage } = require("pg-protocol/dist/messages");
 const db = require("../db/connection");
 const articles = require("../db/data/test-data/articles");
 const comments = require("../db/data/test-data/comments");
@@ -9,10 +10,8 @@ exports.selectTopics = () => {
   });
 };
 
-// "SELECT * FROM articles WHERE article_id = $1;",
-
 //GET API ARTICLES BY ID
-exports.selectArticles = (article_id) => {
+exports.selectArticlesById = (article_id) => {
   return db
     .query(
       "SELECT articles.*, CAST(COUNT(comments.article_id)AS INT) AS comment_count FROM articles LEFT JOIN comments ON articles.article_id = comments.article_id WHERE articles.article_id = $1 GROUP BY articles.article_id;",
@@ -26,6 +25,27 @@ exports.selectArticles = (article_id) => {
         });
       }
       return articles.rows[0];
+    });
+};
+
+//GET API ARTICLES
+exports.selectArticles = () => {
+  // let topics = [
+  //   articles.author,
+  //   articles.title,
+  //   articles.topic,
+  //   articles.article_id,
+  //   articles.created_at,
+  //   articles.votes,
+  //   articles.comment_count,
+  // ];
+
+  return db
+    .query(
+      "SELECT articles.*, CAST(COUNT(comments.article_id)AS INT) AS comment_count FROM articles LEFT JOIN comments ON articles.article_id = comments.article_id GROUP BY articles.article_id ORDER BY articles.created_at DESC;"
+    )
+    .then((articles) => {
+      return articles.rows;
     });
 };
 
