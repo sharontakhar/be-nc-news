@@ -1,4 +1,3 @@
-const { RowDescriptionMessage } = require("pg-protocol/dist/messages");
 const db = require("../db/connection");
 const articles = require("../db/data/test-data/articles");
 const comments = require("../db/data/test-data/comments");
@@ -54,6 +53,21 @@ exports.selectUsers = () => {
   return db.query("SELECT * FROM users;").then((users) => {
     return users.rows;
   });
+};
+
+//GET COMMENTS
+exports.selectComments = (article_id) => {
+  return db
+    .query("SELECT * FROM comments WHERE article_id = $1;", [article_id])
+    .then((comments) => {
+      if (comments.rows.length === 0) {
+        return Promise.reject({
+          status: 400,
+          msg: "comment not found",
+        });
+      }
+      return comments.rows[0];
+    });
 };
 
 //PATCH API ARTICLES

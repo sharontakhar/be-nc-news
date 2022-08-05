@@ -285,3 +285,31 @@ describe("Errors for/api/articles", () => {
       });
   });
 });
+
+//get comments
+describe("9.GET /api/articles/:article_id/comments", () => {
+  test("return an object of comments with the following properties", () => {
+    return request(app)
+      .get("/api/articles/5/comments")
+      .expect(200)
+      .then(({ body }) => {
+        const { comments } = body;
+        expect(comments).toEqual({
+          comment_id: expect.any(Number),
+          votes: expect.any(Number),
+          created_at: expect.any(String),
+          author: expect.any(String),
+          body: expect.any(String),
+          article_id: expect.any(Number),
+        });
+      });
+  });
+  test("return a 400 on content not found on an extended article_id", () => {
+    return request(app)
+      .get("/api/articles/500/comments")
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toEqual("comment not found");
+      });
+  });
+});

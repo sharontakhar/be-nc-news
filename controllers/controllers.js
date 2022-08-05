@@ -5,6 +5,7 @@ const {
   updateArticles,
   selectUsers,
   selectArticles,
+  selectComments,
 } = require("../models/models");
 
 //GET API TOPICS
@@ -47,6 +48,20 @@ exports.getArticles = (req, res, next) => {
       next(err);
     });
 };
+
+//GET COMMENTS
+exports.getComments = (req, res, next) => {
+  const { article_id } = req.params;
+
+  selectComments(article_id)
+    .then((comments) => {
+      res.status(200).send({ comments });
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
+
 //PATCH API ARTICLES
 exports.patchAPIArticles = (req, res, next) => {
   const { article_id } = req.params;
