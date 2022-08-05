@@ -4,6 +4,7 @@ const db = require("../db/connection");
 const seed = require("../db/seeds/seed");
 const testData = require("../db/data/test-data");
 const articles = require("../db/data/test-data/articles");
+const jestSorted = require("jest-sorted");
 
 beforeEach(() => seed(testData));
 afterAll(() => db.end());
@@ -193,7 +194,6 @@ describe("3.PATCH /api/articles/:article_id", () => {
       .expect(200)
       .then(({ body }) => {
         const { articles } = body;
-        //expect(Object.keys(articles).length).toBe(7);
         expect(articles).toEqual({
           article_id: 3,
           title: "Eight pug gifs that remind me of mitch",
@@ -264,23 +264,24 @@ describe("5.GET /api/articles", () => {
       });
   });
 
-  test("the first array to be in DESC order to be equal to the below", () => {
+  test("the array to be ordered by date to be in DESC order", () => {
     return request(app)
       .get("/api/articles")
       .expect(200)
+      .then(({ body }) => {
+        const { articles } = body;
+        expect([{ articles }]).toBeSortedBy("created_at", { descending: true });
+      });
+  });
+});
+
+describe("Errors for/api/articles", () => {
+  test("the array to be ordered by date to be in DESC order", () => {
+    return request(app)
+      .get("/api/art")
+      .expect(404)
       .then((response) => {
-        expect(response.body.articles[0]).toEqual(
-          expect.objectContaining({
-            article_id: 7,
-            title: "Z",
-            topic: "mitch",
-            author: "icellusedkars",
-            body: "I was hungry.",
-            created_at: "2020-01-07T14:08:00.000Z",
-            votes: 0,
-            comment_count: 0,
-          })
-        );
+        expect(response.body.msg).toEqual("Route not found");
       });
   });
 });
