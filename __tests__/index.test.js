@@ -304,12 +304,61 @@ describe("9.GET /api/articles/:article_id/comments", () => {
         });
       });
   });
-  test("return a 400 on content not found on an extended article_id", () => {
+  test("return a 404 on content not found on an extended article_id", () => {
     return request(app)
       .get("/api/articles/500/comments")
-      .expect(400)
+      .expect(404)
       .then((response) => {
         expect(response.body.msg).toEqual("comment not found");
+      });
+  });
+});
+
+//POST comments
+describe("10. POST /api/articles/:article_id/comments", () => {
+  test("to post a comment with the below object properties present", () => {
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send({
+        username: "butter_bridge",
+        body: "hello this is the username",
+      })
+      .expect(200)
+      .then(({ body }) => {
+        const { comments } = body;
+        expect(comments).toEqual({
+          comment_id: expect.any(Number),
+          body: "hello this is the username",
+          article_id: 1,
+          author: "butter_bridge",
+          votes: expect.any(Number),
+          created_at: expect.any(String),
+        });
+      });
+  });
+
+  test("error message is returned if the username is not within the database", () => {
+    return request(app)
+      .post("/api/articles/5/comments")
+      .send({
+        username: "sharon_takhar",
+        body: "hello this is the username",
+      })
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toEqual("Bad Request");
+      });
+  });
+
+  test("error message is returned if the post request is missing", () => {
+    return request(app)
+      .post("/api/articles/5/comments")
+      .send({
+        body: "hello this is the username",
+      })
+      .expect(200)
+      .then((response) => {
+        expect(response.body.msg).toEqual("Missing key");
       });
   });
 });

@@ -7,6 +7,7 @@ const {
   getUsers,
   getArticles,
   getComments,
+  postComments,
 } = require("./controllers/controllers");
 
 // GET
@@ -16,8 +17,11 @@ app.get("/api/users", getUsers);
 app.get("/api/articles", getArticles);
 app.get("/api/articles/:article_id/comments", getComments);
 
-//PATCH
+//POST
 app.use(express.json());
+app.post("/api/articles/:article_id/comments", postComments);
+//PATCH
+
 app.patch("/api/articles/:article_id", patchAPIArticles);
 
 // Error Handling
@@ -37,6 +41,8 @@ app.use((err, req, res, next) => {
     res.status(400).send({ msg: "Bad Request" });
   } else if (err.code === "23502") {
     res.status(200).send({ msg: "Missing key" });
+  } else if (err.code === "23503") {
+    res.status(400).send({ msg: "Bad Request" });
   }
 });
 

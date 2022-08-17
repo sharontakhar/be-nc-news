@@ -62,7 +62,7 @@ exports.selectComments = (article_id) => {
     .then((comments) => {
       if (comments.rows.length === 0) {
         return Promise.reject({
-          status: 400,
+          status: 404,
           msg: "comment not found",
         });
       }
@@ -86,5 +86,18 @@ exports.updateArticles = (article_id, inc_votes = 0) => {
         });
       }
       return articles.rows[0];
+    });
+};
+
+//POST COMMENTS
+
+exports.insertComments = (article_id, username, body) => {
+  return db
+    .query(
+      "INSERT INTO comments (article_id, author, body) VALUES ($1,$2, $3) RETURNING *;",
+      [article_id, username, body]
+    )
+    .then((comments) => {
+      return comments.rows[0];
     });
 };

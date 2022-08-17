@@ -6,6 +6,7 @@ const {
   selectUsers,
   selectArticles,
   selectComments,
+  insertComments,
 } = require("../models/models");
 
 //GET API TOPICS
@@ -74,4 +75,22 @@ exports.patchAPIArticles = (req, res, next) => {
     .catch((err) => {
       next(err);
     });
+};
+
+//POST COMMENTs
+exports.postComments = (req, res, next) => {
+  const { article_id } = req.params;
+  const { username, body } = req.body;
+
+  if (req.body == undefined || req.body == null) {
+    res.status(400).send("Bad Request");
+  } else
+    insertComments(article_id, username, body)
+      .then((comments) => {
+        res.status(200).send({ comments });
+      })
+      .catch((err) => {
+        console.log(err);
+        next(err);
+      });
 };
