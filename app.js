@@ -1,14 +1,22 @@
 const express = require("express");
 const app = express();
 const {
-  getAPITopics,
   getAPIArticlesbyID,
   patchAPIArticles,
-  getUsers,
   getArticles,
+} = require("./controllers/articlesControllers");
+const { getUsers } = require("./controllers/usersController.js");
+const { getAPITopics } = require("./controllers/topicsController.js");
+const {
   getComments,
-} = require("./controllers/controllers");
+  postComments,
+  deleteComment,
+} = require("./controllers/commentControllers");
+const cors = require("cors");
+app.use(cors());
 
+const { getEndPoints } = require("./controllers/apiEndpoint.js");
+app.use(express.json());
 // GET
 app.get("/api/topics", getAPITopics);
 app.get("/api/articles/:article_id", getAPIArticlesbyID);
@@ -16,9 +24,17 @@ app.get("/api/users", getUsers);
 app.get("/api/articles", getArticles);
 app.get("/api/articles/:article_id/comments", getComments);
 
+//POST
+app.post("/api/articles/:article_id/comments", postComments);
+
 //PATCH
-app.use(express.json());
 app.patch("/api/articles/:article_id", patchAPIArticles);
+
+//DELETE
+app.delete("/api/comments/:comment_id", deleteComment);
+
+//ENDPOINT
+app.get("/api", getEndPoints);
 
 // Error Handling
 app.use("*", (req, res) => {
@@ -37,6 +53,8 @@ app.use((err, req, res, next) => {
     res.status(400).send({ msg: "Bad Request" });
   } else if (err.code === "23502") {
     res.status(200).send({ msg: "Missing key" });
+  } else if (err.code === "23503") {
+    res.status(400).send({ msg: "Bad Request" });
   }
 });
 

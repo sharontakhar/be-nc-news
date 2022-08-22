@@ -1,19 +1,9 @@
 const articles = require("../db/data/test-data/articles");
 const {
-  selectTopics,
   selectArticlesById,
   updateArticles,
-  selectUsers,
   selectArticles,
-  selectComments,
-} = require("../models/models");
-
-//GET API TOPICS
-exports.getAPITopics = (req, res) => {
-  selectTopics().then((topics) => {
-    res.status(200).send({ topics });
-  });
-};
+} = require("../models/articleModels");
 
 //GET API ARTICLES BY ID
 exports.getAPIArticlesbyID = (req, res, next) => {
@@ -27,35 +17,13 @@ exports.getAPIArticlesbyID = (req, res, next) => {
     });
 };
 
-//GET API USERS
-exports.getUsers = (req, res, next) => {
-  selectUsers()
-    .then((users) => {
-      res.status(200).send({ users });
-    })
-    .catch((err) => {
-      next(err);
-    });
-};
-
 //GET API ARTICLES
 exports.getArticles = (req, res, next) => {
-  selectArticles()
+  const { sort_by, order, topic } = req.query;
+
+  selectArticles(sort_by, order, topic)
     .then((articles) => {
       res.status(200).send({ articles });
-    })
-    .catch((err) => {
-      next(err);
-    });
-};
-
-//GET COMMENTS
-exports.getComments = (req, res, next) => {
-  const { article_id } = req.params;
-
-  selectComments(article_id)
-    .then((comments) => {
-      res.status(200).send({ comments });
     })
     .catch((err) => {
       next(err);
