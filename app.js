@@ -13,7 +13,7 @@ const {
   deleteComment,
 } = require("./controllers/commentControllers");
 const cors = require("cors");
-app.user(cors());
+app.use(cors());
 
 const { getEndPoints } = require("./controllers/apiEndpoint.js");
 app.use(express.json());
