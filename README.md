@@ -9,7 +9,6 @@ Connect Locally
 
 You can use the "git clone" command to download this project from a remote server locally. The node_modules is not a part of the cloned repo, therefore you need to use "npm install" command to download all the dependencies required.
 
-
 Enviroment Variables Files
 please remember to create your environment files as per the below and ensure these are ignored and mentioned in .gitignore by using ".env.\*"
 
