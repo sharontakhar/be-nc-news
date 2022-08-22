@@ -12,6 +12,8 @@ const {
   postComments,
   deleteComment,
 } = require("./controllers/commentControllers");
+const cors = require("cors");
+app.user(cors());
 
 const { getEndPoints } = require("./controllers/apiEndpoint.js");
 app.use(express.json());
