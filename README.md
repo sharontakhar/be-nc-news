@@ -3,6 +3,9 @@ BE-NC-NEWS
 Hi all, welcome to my repo!
 
 I be building an API for the purpose of accessing application data programmatically.
+
+https://nc-news-be-app.herokuapp.com/ deployed to Heroku
+
 My intention here is to mimic the building of a real world backend service (such as reddit, quora, YOU KNOW THE SCORE!) which should provide this information to the front end architecture.
 
 Connect Locally
