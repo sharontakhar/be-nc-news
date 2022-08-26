@@ -15,7 +15,8 @@ exports.selectComments = (article_id) => {
           msg: "comment not found",
         });
       }
-      return comments.rows[0];
+
+      return comments.rows;
     });
 };
 

@@ -295,13 +295,15 @@ describe("9.GET /api/articles/:article_id/comments", () => {
       .expect(200)
       .then(({ body }) => {
         const { comments } = body;
-        expect(comments).toEqual({
-          comment_id: expect.any(Number),
-          votes: expect.any(Number),
-          created_at: expect.any(String),
-          author: expect.any(String),
-          body: expect.any(String),
-          article_id: expect.any(Number),
+        comments.forEach((comment) => {
+          expect(comment).toEqual({
+            comment_id: expect.any(Number),
+            votes: expect.any(Number),
+            created_at: expect.any(String),
+            author: expect.any(String),
+            body: expect.any(String),
+            article_id: expect.any(Number),
+          });
         });
       });
   });
